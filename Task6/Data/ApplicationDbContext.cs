@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Task6.Models;
 
 namespace Task6.Data
 {
@@ -15,5 +16,6 @@ namespace Task6.Data
         {
             base.OnModelCreating(builder);
         }
+        public DbSet<Message>? Message { get; set; }
     }
 }
