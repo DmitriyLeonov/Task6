@@ -21,6 +21,7 @@ namespace Task6
 
             builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
+
             builder.Services.AddControllersWithViews();
             builder.Services.AddSignalR();
             builder.Services.AddControllers().AddJsonOptions(options =>
@@ -61,7 +62,7 @@ namespace Task6
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
             app.MapRazorPages();
-            app.MapHub<MessageHub>("/mail");
+            app.MapHub<MessageHub>("messagehub");
 
             app.Run();
         }
