@@ -16,6 +16,6 @@ namespace Task6.Data
         {
             base.OnModelCreating(builder);
         }
-        public DbSet<Message>? Message { get; set; }
+        public DbSet<Message> Message { get; set; }
     }
 }

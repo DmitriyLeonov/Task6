@@ -27,16 +27,39 @@ namespace Task6.Controllers
 
         public async Task<IActionResult> Index()
         {
-            return _context.Message != null ?
-                        View(await _context.Message.ToListAsync()) :
-                        Problem("Entity set 'ApplicationDbContext.Message'  is null.");
+            List<ViewMessage> messages = new List<ViewMessage>();
+            var res = _context.Message.ToList();
+            foreach (var message in res)
+            {
+                messages.Add(new ViewMessage()
+                {
+                    Body = message.Body,
+                    Created = message.Created,
+                    IsRead = message.IsRead,
+                    Sender = message.Sender,
+                    Title = message.Title
+                });
+            }
+            return View(messages);
         }
 
         [HttpGet]
         public IActionResult GetMessages()
         {
+            List<ViewMessage> messages = new List<ViewMessage>();
             var res = _context.Message.ToList();
-            return Ok(res);
+            foreach (var message in res)
+            {
+                messages.Add(new ViewMessage()
+                {
+                    Body = message.Body,
+                    Created = message.Created,
+                    IsRead = message.IsRead,
+                    Sender = message.Sender,
+                    Title = message.Title
+                });
+            }
+            return Ok(messages);
         }
 
         // GET: Messages/Details/5
@@ -54,6 +77,7 @@ namespace Task6.Controllers
                 return NotFound();
             }
 
+            message.IsRead = true;
             return View(message);
         }
 
@@ -68,8 +92,9 @@ namespace Task6.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,Body,Sender,Created,Reciever")] Message message)
+        public async Task<IActionResult> Create([Bind("Id,Title,Body,Sender,Created,Reciever,IsRead")] Message message)
         {
+            message.IsRead = false;
             if (ModelState.IsValid)
             {
                 _context.Add(message);
@@ -80,94 +105,13 @@ namespace Task6.Controllers
             return View(message);
         }
 
-        // GET: Messages/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null || _context.Message == null)
-            {
-                return NotFound();
-            }
-
-            var message = await _context.Message.FindAsync(id);
-            if (message == null)
-            {
-                return NotFound();
-            }
-            return View(message);
-        }
-
-        // POST: Messages/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int Id, [Bind("Id,Title,Body,Sender,Created,Reciever")] Message message)
+        public JsonResult GetUsers(string prefix)
         {
-            if (Id != message.Id)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(message);
-                    await _context.SaveChangesAsync();
-                    await _hubContext.Clients.All.SendAsync("LoadMessages");
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!MessageExists(message.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(message);
-        }
-
-        // GET: Messages/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null || _context.Message == null)
-            {
-                return NotFound();
-            }
-
-            var message = await _context.Message
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (message == null)
-            {
-                return NotFound();
-            }
-
-            return View(message);
-        }
-
-        // POST: Messages/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int Id)
-        {
-            if (_context.Message == null)
-            {
-                return Problem("Entity set 'ApplicationDbContext.Message'  is null.");
-            }
-            var message = await _context.Message.FindAsync(Id);
-            if (message != null)
-            {
-                _context.Message.Remove(message);
-            }
-            
-            await _context.SaveChangesAsync();
-            await _hubContext.Clients.All.SendAsync("LoadMessages");
-            return RedirectToAction(nameof(Index));
+            var users = (from u in _context.Users
+                where u.UserName.StartsWith(prefix)
+                select new { u.UserName });
+            return Json(users);
         }
 
         private bool MessageExists(int id)

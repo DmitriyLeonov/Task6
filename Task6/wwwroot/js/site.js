@@ -21,12 +21,10 @@ $(() => {
                     (k, v) => {
                         console.log(v);
                         tr += ` <tr>  
-                                    <td> ${v.Id}</td>
                                     <td> ${v.Title}</td>
                                     <td> ${v.Body}</td>
                                     <td> ${v.Sender}</td>
                                     <td>${v.Created}</td>
-                                    <td> ${v.Reciever}</td>
                                 </tr>`
                     })
 

@@ -9,11 +9,11 @@ using Task6.Data;
 
 #nullable disable
 
-namespace Task6.Data.Migrations
+namespace Task6.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230323144906_messages")]
-    partial class messages
+    [Migration("20230327164612_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -240,6 +240,9 @@ namespace Task6.Data.Migrations
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsRead")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Reciever")
                         .IsRequired()
