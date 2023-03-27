@@ -13,7 +13,22 @@
     <p>
         <a asp-action="Create">Create New</a>
     </p>
+    @*@Html.Hidden("Get", Url.Action("Index", "Messages"))*@
+
     <table class="table">
+        <thead>
+        <tr>
+            <th>Id</th>
+            <th>Title</th>
+            <th>Body</th>
+            <th>Sender</th>
+            <th>Date</th>
+        </tr>
+        </thead>
+
+        <tbody id="tblInfo"></tbody>
+    </table>
+    @*<table class="table">
         <thead>
         <tr>
             <th>
@@ -60,17 +75,13 @@
             </tr>
         }
         </tbody>
-    </table>
+    </table>*@
 }
 else
 {
     {
         ViewData["Title"] = "Access denied";
+        <h1 class="text-danger">@ViewData["Title"]</h1>
+        <p class="text-danger">You do not have access to this resource.</p>
     }
-
-    <header>
-    <h1 class="text-danger">@ViewData["Title"]</h1>
-    <p class="text-danger">You do not have access to this resource.</p>
-    </header>
 }
-    

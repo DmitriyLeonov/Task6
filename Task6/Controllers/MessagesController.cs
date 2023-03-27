@@ -2,10 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+//using ASP;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.SignalR;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Task6.Data;
+using Task6.Hubs;
 using Task6.Models;
 
 namespace Task6.Controllers
@@ -13,18 +17,26 @@ namespace Task6.Controllers
     public class MessagesController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IHubContext<MessageHub> _hubContext;
 
-        public MessagesController(ApplicationDbContext context)
+        public MessagesController(ApplicationDbContext context, IHubContext<MessageHub> hubContext)
         {
             _context = context;
+            _hubContext = hubContext;
         }
 
-        // GET: Messages
         public async Task<IActionResult> Index()
         {
-              return _context.Message != null ? 
-                          View(await _context.Message.ToListAsync()) :
-                          Problem("Entity set 'ApplicationDbContext.Message'  is null.");
+            return _context.Message != null ?
+                        View(await _context.Message.ToListAsync()) :
+                        Problem("Entity set 'ApplicationDbContext.Message'  is null.");
+        }
+
+        [HttpGet]
+        public IActionResult GetMessages()
+        {
+            var res = _context.Message.ToList();
+            return Ok(res);
         }
 
         // GET: Messages/Details/5
@@ -62,6 +74,7 @@ namespace Task6.Controllers
             {
                 _context.Add(message);
                 await _context.SaveChangesAsync();
+                await _hubContext.Clients.All.SendAsync("LoadMessages");
                 return RedirectToAction(nameof(Index));
             }
             return View(message);
@@ -88,9 +101,9 @@ namespace Task6.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Body,Sender,Created,Reciever")] Message message)
+        public async Task<IActionResult> Edit(int Id, [Bind("Id,Title,Body,Sender,Created,Reciever")] Message message)
         {
-            if (id != message.Id)
+            if (Id != message.Id)
             {
                 return NotFound();
             }
@@ -101,6 +114,7 @@ namespace Task6.Controllers
                 {
                     _context.Update(message);
                     await _context.SaveChangesAsync();
+                    await _hubContext.Clients.All.SendAsync("LoadMessages");
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -139,19 +153,20 @@ namespace Task6.Controllers
         // POST: Messages/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(int Id)
         {
             if (_context.Message == null)
             {
                 return Problem("Entity set 'ApplicationDbContext.Message'  is null.");
             }
-            var message = await _context.Message.FindAsync(id);
+            var message = await _context.Message.FindAsync(Id);
             if (message != null)
             {
                 _context.Message.Remove(message);
             }
             
             await _context.SaveChangesAsync();
+            await _hubContext.Clients.All.SendAsync("LoadMessages");
             return RedirectToAction(nameof(Index));
         }
 
