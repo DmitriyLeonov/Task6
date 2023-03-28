@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using NToastNotify;
 using Task6.Data;
 using Task6.Hubs;
 
@@ -21,7 +22,12 @@ namespace Task6
 
             builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
-
+            builder.Services.AddMvc().AddNToastNotifyToastr(new ToastrOptions()
+            {
+                ProgressBar = true,
+                TimeOut = 2000,
+                PositionClass = ToastPositions.BottomRight
+            });
             builder.Services.AddControllersWithViews();
             builder.Services.AddSignalR();
             builder.Services.AddControllers().AddJsonOptions(options =>
@@ -55,7 +61,7 @@ namespace Task6
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseRouting();
-            
+            app.UseNToastNotify();
             app.UseAuthentication();
             app.UseAuthorization();
             app.MapControllerRoute(

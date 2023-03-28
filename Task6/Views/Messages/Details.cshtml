@@ -1,49 +1,45 @@
-﻿@model Task6.Models.Message
+﻿@model Task6.Models.ViewMessage
 
 @{
     ViewData["Title"] = "Details";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Details</h1>
+<div class="container">
+    <div class="row inbox-wrapper">
+        <div class="col-lg-9 align-self-center offset-md-2">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-lg-9 email-content">
+                            <div class="email-head">
+                                <div class="email-head-subject">
+                                    <div class="title d-flex align-items-center justify-content-between">
+                                        <div class="d-flex align-items-center">
+                                            @Html.DisplayFor(model => model.Title)
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="email-head-sender d-flex align-items-center justify-content-between flex-wrap">
+                                    <div class="d-flex align-items-center">
+                                        <div class="sender d-flex align-items-center">
+                                            @Html.DisplayFor(model => model.Sender)
+                                        </div>
+                                    </div>
+                                    <div class="date">@Html.DisplayFor(model => model.Created)</div>
+                                </div>
+                            </div>
+                            <br/>
+                            <br />
+                            <br />
+                            <div class="email-body">
+                                @Html.DisplayFor(model => model.Body)
+                            </div>
+                        </div>
+                    </div>
 
-<div>
-    <h4>Message</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Title)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Title)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Body)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Body)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Sender)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Sender)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Created)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Created)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Reciever)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Reciever)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

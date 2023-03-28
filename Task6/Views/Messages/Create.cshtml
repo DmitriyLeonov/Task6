@@ -6,42 +6,35 @@
 }
 
 <h1>Create</h1>
-
-<h4>Message</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Reciever" class="control-label"></label>
-                <input asp-for="Reciever" id="Name" class="form-control"/>
-                <span asp-validation-for="Reciever" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Title" class="control-label"></label>
-                <input asp-for="Title" class="form-control" />
-                <span asp-validation-for="Title" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Body" class="control-label"></label>
-                <input asp-for="Body" class="form-control" />
-                <span asp-validation-for="Body" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Sender" class="control-label"></label>
-                <input asp-for="Sender" class="form-control" />
-                <span asp-validation-for="Sender" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+<div class="row align-items-center">
+    <div class="col-md-6 align-self-center offset-md-3">
+        <h1 align="center">@ViewData["Title"]</h1>
+        <section>
+            <form asp-action="Create">
+                <br />
+                <br />
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <label asp-for="Reciever" class="control-label">To</label>
+                <div class="mb-3">
+                    <input asp-for="Reciever" id="Name" class="form-control"/>
+                    <span asp-validation-for="Reciever" class="text-danger"></span>
+                </div>
+                <label asp-for="Title" class="control-label">Subject</label>
+                <div class="mb-3">
+                    <input asp-for="Title" class="form-control" />
+                    <span asp-validation-for="Title" class="text-danger"></span>
+                </div>
+                <label asp-for="Body" class="control-label">Message</label>
+                <div class="mb-3">
+                    <textarea asp-for="Body" class="form-control" ></textarea>
+                    <span asp-validation-for="Body" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="w-100 btn btn-lg btn-outline-dark">Create</button>
+                </div>
+            </form>
+        </section>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
 </div>
 
 @section Scripts {

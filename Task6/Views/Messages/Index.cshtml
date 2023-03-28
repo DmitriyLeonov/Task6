@@ -8,9 +8,30 @@
 }
 @if (SignInManager.IsSignedIn(User))
 {
-    <h1>Index</h1>
-
-    <p>
+    <div class="container">
+        <link rel='stylesheet prefetch' href='http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css'>
+        <div class="mail-box">
+            <aside class="sm-side">
+                <div class="user-head">
+                    <a href="/Messages/Create" data-toggle="modal" title="Compose" class="btn btn-compose">
+                        NEW MESSAGE
+                    </a>
+                </div>
+            </aside>
+            <aside class="lg-side">
+                <div class="inbox-head">
+                    <h3>Inbox</h3>
+                </div>
+                <div class="inbox-body">
+                    <table class="table table-inbox table-hover">
+                        <tbody id="tblInfo">
+                        </tbody>
+                    </table>
+                </div>
+            </aside>
+        </div>
+    </div>
+   @* <p>
         <a asp-action="Create">Create New</a>
     </p>
     <table class="table table-hover table-bordered">
@@ -24,7 +45,7 @@
         </thead>
 
         <tbody id="tblInfo" ></tbody>
-    </table>
+    </table>*@
 }
 else
 {

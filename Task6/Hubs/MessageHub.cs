@@ -7,6 +7,9 @@ namespace Task6.Hubs
 {
     public class MessageHub : Hub
     {
-       
+        public async Task Send()
+        {
+            var user = Context.User;
+        }
     }
 }
